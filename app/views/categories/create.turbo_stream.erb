@@ -1,0 +1,4 @@
+<%= turbo_stream.before 'add_category', render(@category) %>
+<%= turbo_stream.replace dom_id(Category.new) do %>
+  <%= render 'form', category: Category.new, name: 'Category name' %>
+<% end %>
