@@ -83,6 +83,7 @@ group :test do
   gem 'capybara'
   gem 'database_cleaner-active_record'
   gem 'launchy'
+  gem 'rails-controller-testing'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers'
   gem 'timecop'
