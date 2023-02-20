@@ -463,6 +463,12 @@ Layout/InitialIndentation:
 
 # Lint
 
+Lint/AmbiguousBlockAssociation:
+  Description: >-
+                 Checks for ambiguous block association with method
+                 when param passed without parentheses.
+  AllowedPatterns: ['change']
+
 Lint/AmbiguousOperator:
   Description: >-
                  Checks for ambiguous operators in the first argument of a
