@@ -21,6 +21,7 @@
 class Category < ApplicationRecord
   # - Relationships - #
   belongs_to :user, optional: false
+  has_many :spendings, dependent: :nullify
 
   # - Validations - #
   validates :name, presence: true

@@ -26,6 +26,7 @@ class User < ApplicationRecord
 
   # - Relationships - #
   has_many :categories, dependent: :destroy
+  has_many :spendings, dependent: :destroy
 
   # - Validations - #
   validates :name, presence: true
