@@ -27,7 +27,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_21_003339) do
     t.decimal "amount", precision: 16, scale: 2
     t.text "description"
     t.bigint "user_id", null: false
-    t.bigint "category_id", null: false
+    t.bigint "category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_spendings_on_category_id"
@@ -42,7 +42,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_21_003339) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "name", null: false
+    t.string "name"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

@@ -10,7 +10,7 @@
 #  title       :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  category_id :bigint           not null
+#  category_id :bigint
 #  user_id     :bigint           not null
 #
 # Indexes
@@ -26,7 +26,7 @@
 class Spending < ApplicationRecord
   # - Relationships - #
   belongs_to :user, optional: false
-  belongs_to :category
+  belongs_to :category, optional: true
 
   # - Validations - #
   validates :title, :amount, presence: true

@@ -10,7 +10,7 @@
 #  title       :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  category_id :bigint           not null
+#  category_id :bigint
 #  user_id     :bigint           not null
 #
 # Indexes
@@ -28,7 +28,7 @@ require 'rails_helper'
 RSpec.describe Spending do
   describe 'Relations' do
     it { is_expected.to belong_to(:user).required }
-    it { is_expected.to belong_to(:category) }
+    it { is_expected.to belong_to(:category).required(false) }
   end
 
   describe 'Validations' do
