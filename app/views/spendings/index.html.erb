@@ -1,0 +1,18 @@
+<div class="d-flex flex-row">
+  <aside class="container text-center d-flex align-items-start w-25 m-0 bg-dark text-white">
+    <h1 class="my-5">
+      <%= "Your total spending is:\n#{current_user.spendings.sum(:amount)}" %>
+    </h1>
+  </aside>
+  <div class="container text-center">
+    <div class="col d-flex justify-content-center align-items-center mt-5 mb-0">
+      <%= link_to 'Add Spending', new_spending_path,
+        class: 'btn btn-success btn-lg',
+        data: { turbo_frame: dom_id(Spending.new) } %>
+    </div>
+    <%= turbo_frame_tag Spending.new %>
+    <%= turbo_frame_tag 'spendings', class: 'row row-cols-2 g-4 my-4' do %>
+      <%= render @spendings %>
+    <% end %>
+  </div>
+</div>

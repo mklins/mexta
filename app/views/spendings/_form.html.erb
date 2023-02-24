@@ -1,0 +1,28 @@
+<%= form_with model: spending do |f| %>
+  <%= render 'devise/shared/error_messages', resource: spending %>
+
+  <div class="col">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title form-floating">
+          <%= f.text_field :title, class: "form-control", placeholder: 'Spending title' %>
+          <%= f.label :title, 'Spending title' %>
+        </h5>
+        <h6 class="form-floating">
+          <%= f.collection_select :category_id, current_user.categories, :id, :name, { prompt: true }, { class: "form-select pb-1" } %>
+          <%= f.label :categories, 'Category' %>
+        </h6>
+        <p class="card-text form-floating">
+          <%= f.text_area :description, class: "form-control", placeholder: 'Spending description' %>
+          <%= f.label :description, 'Spending description' %>
+        </p>
+        <h4 class="form-floating d-flex justify-content-between align-items-center">
+          <%= f.text_field :amount, class: "form-control pb-1", placeholder: 'Spending amount' %>
+          <%= f.label :amount, 'Spending amount' %>
+        </h4>
+
+        <%= f.submit 'Submit', class: 'btn btn-success btn-lg' %>
+      </div>
+    </div>
+  </div>
+<% end %>

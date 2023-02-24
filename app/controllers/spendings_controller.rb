@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
 class SpendingsController < ApplicationController
-  before_action :find_spending, only: %i[show edit update destroy]
+  before_action :find_spending, only: %i[edit update destroy]
 
   def index
-    @spendings = current_user.spendings
+    @spendings = current_user.spendings.order(created_at: :desc)
   end
-
-  def show; end
 
   def new
     @spending = current_user.spendings.build
@@ -49,7 +47,7 @@ class SpendingsController < ApplicationController
   private
 
   def spending_params
-    params.require(:spending).permit(:title, :amount, :description)
+    params.require(:spending).permit(:title, :amount, :description, :category_id)
   end
 
   def find_spending

@@ -11,8 +11,8 @@ RSpec.describe 'Spendings' do
   describe 'GET #index' do
     subject(:get_index) { get '/spendings/' }
 
-    let(:spending1) { create(:spending, user:) }
-    let(:spending2) { create(:spending, user:) }
+    let!(:spending1) { create(:spending, user:) }
+    let!(:spending2) { create(:spending, user:) }
 
     include_examples 'redirects guest to log in page'
 
@@ -24,29 +24,10 @@ RSpec.describe 'Spendings' do
 
       it 'does proper assignment' do
         get_index
-        expect(assigns(:spendings)).to match_array([spending1, spending2])
+        expect(assigns(:spendings)).to match_array([spending2, spending1])
       end
 
       include_examples 'html response', :ok, :index
-    end
-  end
-
-  describe 'GET #show' do
-    subject(:get_show) { get "/spendings/#{spending.id}" }
-
-    let(:spending) { create(:spending, user:) }
-
-    include_examples 'redirects guest to log in page'
-
-    context 'when user' do
-      before { sign_in(user) }
-
-      it 'does proper assignment' do
-        get_show
-        expect(assigns(:spending)).to eq(spending)
-      end
-
-      include_examples 'html response', :ok, :show
     end
   end
 
