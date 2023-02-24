@@ -1,0 +1,31 @@
+<%= turbo_frame_tag spending, class: 'col' do %>
+  <div class="card h-100">
+    <div class="card-body d-flex justify-content-center align-items-center">
+      <%= turbo_frame_tag "edit_spending_#{spending.id}", class: 'w-100' do %>
+        <div class="d-flex flex-row justify-content-center align-items-center">
+          <div class="w-50 h-100 me-2">
+            <h2 class="card-title fw-bold"><%= spending.title %></h2>
+            <% if spending.category.present? %>
+              <h4><span class="badge rounded-pill text-bg-info"><%= spending.category.name %></span></h4>
+            <% end %>
+            <h1 class="m-0 mt-4 d-flex justify-content-center align-items-end"><%= spending.amount %>₴</h1>
+          </div>
+          <% if spending.description.present? %>
+            <div class="w-50 ms-2 ps-2 border-start">
+              <p class="card-text text-break"><%= spending.description %></p>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    <div class="card-footer">
+      <div class="btn-group d-flex align-items-center" role="group">
+        <%= link_to 'Edit', edit_spending_path(spending), class: 'btn btn-secondary',
+          data: { turbo_frame: "edit_spending_#{spending.id}" } %>
+        <%= link_to 'Delete', spending_path(spending), class: 'btn btn-danger',
+          data: { turbo_frame: dom_id(spending), turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
+      </div>
+      <small class="text-muted"><%= "Created #{spending.created_at}" %></small>
+    </div>
+  </div>
+<% end %>

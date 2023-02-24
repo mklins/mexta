@@ -23,6 +23,7 @@ require 'rails_helper'
 RSpec.describe Category do
   describe 'Relations' do
     it { is_expected.to belong_to(:user).required }
+    it { is_expected.to have_many(:spendings).dependent(:nullify) }
   end
 
   describe 'Validations' do

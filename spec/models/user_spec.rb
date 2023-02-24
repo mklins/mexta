@@ -7,7 +7,7 @@
 #  id                     :bigint           not null, primary key
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
-#  name                   :string           not null
+#  name                   :string
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
@@ -24,6 +24,7 @@ require 'rails_helper'
 RSpec.describe User do
   describe 'Relations' do
     it { is_expected.to have_many(:categories).dependent(:destroy) }
+    it { is_expected.to have_many(:spendings).dependent(:destroy) }
   end
 
   describe 'Validations' do
@@ -32,13 +33,13 @@ RSpec.describe User do
   end
 
   describe 'Callbacks' do
-    let(:user) { build :user }
+    let(:user) { build(:user) }
 
     it 'creates default pack of categories after user creation' do
       expect { user.save }.to change(Category, :count).by(6)
 
       expect(user.categories.pluck(:name)).to contain_exactly(
-        "Traveling", "Clothing", "Taxi", "Cafes", "Shops", "Other"
+        'Traveling', 'Clothing', 'Taxi', 'Cafes', 'Shops', 'Other'
       )
     end
   end

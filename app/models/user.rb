@@ -7,7 +7,7 @@
 #  id                     :bigint           not null, primary key
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
-#  name                   :string           not null
+#  name                   :string
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
@@ -26,6 +26,7 @@ class User < ApplicationRecord
 
   # - Relationships - #
   has_many :categories, dependent: :destroy
+  has_many :spendings, dependent: :destroy
 
   # - Validations - #
   validates :name, presence: true
