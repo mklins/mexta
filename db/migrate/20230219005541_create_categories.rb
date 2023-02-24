@@ -11,6 +11,7 @@ class CreateCategories < ActiveRecord::Migration[7.0]
   end
 
   def down
+    remove_foreign_key :users, :categories
     drop_table :categories
   end
 end

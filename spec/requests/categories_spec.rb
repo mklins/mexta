@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative 'shared_examples/redirects'
+require_relative 'shared_examples/responses'
 
 RSpec.describe 'Categories' do
   let(:user) { create(:user) }
@@ -13,11 +15,7 @@ RSpec.describe 'Categories' do
     let!(:category2) { create(:category, user:) }
     let(:default_categories) { %w[Traveling Clothing Taxi Cafes Shops Other] }
 
-    context 'when guest' do
-      before { get_index }
-
-      it { expect(response).to redirect_to('/users/sign_in') }
-    end
+    include_examples 'redirects guest to log in page'
 
     context 'when user' do
       before do
@@ -32,21 +30,14 @@ RSpec.describe 'Categories' do
         )
       end
 
-      it 'renders index template' do
-        expect(response).to have_http_status(:ok)
-        expect(response).to render_template :index
-      end
+      include_examples 'html response', :ok, :index
     end
   end
 
   describe 'GET #new' do
     subject(:get_new) { get '/categories/new' }
 
-    context 'when guest' do
-      before { get_new }
-
-      it { expect(response).to redirect_to('/users/sign_in') }
-    end
+    include_examples 'redirects guest to log in page'
 
     context 'when user' do
       before do
@@ -59,10 +50,7 @@ RSpec.describe 'Categories' do
         expect(assigns(:category).user_id).to eq(user.id)
       end
 
-      it 'renders new template' do
-        expect(response).to have_http_status(:ok)
-        expect(response).to render_template :new
-      end
+      include_examples 'html response', :ok, :new
     end
   end
 
@@ -71,11 +59,7 @@ RSpec.describe 'Categories' do
 
     let(:category) { create(:category, user:) }
 
-    context 'when guest' do
-      before { get_edit }
-
-      it { expect(response).to redirect_to('/users/sign_in') }
-    end
+    include_examples 'redirects guest to log in page'
 
     context 'when user' do
       before do
@@ -87,10 +71,7 @@ RSpec.describe 'Categories' do
         expect(assigns(:category)).to eq(category)
       end
 
-      it 'renders edit template' do
-        expect(response).to have_http_status(:ok)
-        expect(response).to render_template :edit
-      end
+      include_examples 'html response', :ok, :edit
     end
   end
 
@@ -99,17 +80,14 @@ RSpec.describe 'Categories' do
       post '/categories', params: { category: category_params }, headers:
     end
 
+    let(:headers) { nil }
     let(:category_params) { { name: } }
 
     context 'with valid parameters' do
       let(:headers) { { 'Accept' => 'text/vnd.turbo-stream.html' } }
       let(:name) { 'Test' }
 
-      context 'when guest' do
-        before { post_create }
-
-        it { expect(response).to redirect_to('/users/sign_in') }
-      end
+      include_examples 'redirects guest to log in page'
 
       context 'when user' do
         before do
@@ -121,31 +99,20 @@ RSpec.describe 'Categories' do
         end
 
         describe 'assignments and responses' do
-          before { post_create }
-
           it 'does proper assignment' do
+            post_create
             expect(assigns(:category).name).to eq(name)
           end
 
-          it 'responds in proper format' do
-            expect(response).to have_http_status(:ok)
-            expect(response.content_type).to eq(
-              'text/vnd.turbo-stream.html; charset=utf-8'
-            )
-          end
+          include_examples 'turbo_stream response'
         end
       end
     end
 
     context 'with invalid parameters' do
-      let(:headers) { nil }
       let(:name) { '' }
 
-      context 'when guest' do
-        before { post_create }
-
-        it { expect(response).to redirect_to('/users/sign_in') }
-      end
+      include_examples 'redirects guest to log in page'
 
       context 'when user' do
         before do
@@ -156,12 +123,7 @@ RSpec.describe 'Categories' do
           expect { post_create }.not_to change(Category, :count)
         end
 
-        it 'responds in proper format' do
-          post_create
-          expect(response).to have_http_status(:unprocessable_entity)
-          expect(response.content_type).to eq 'text/html; charset=utf-8'
-          expect(response).to render_template :new
-        end
+        include_examples 'html response', :unprocessable_entity, :new
       end
     end
   end
@@ -173,6 +135,7 @@ RSpec.describe 'Categories' do
         headers:
     end
 
+    let(:headers) { nil }
     let(:category) { create(:category, user:) }
     let(:category_params) { { name: } }
 
@@ -180,11 +143,7 @@ RSpec.describe 'Categories' do
       let(:headers) { { 'Accept' => 'text/vnd.turbo-stream.html' } }
       let(:name) { 'Test' }
 
-      context 'when guest' do
-        before { patch_update }
-
-        it { expect(response).to redirect_to('/users/sign_in') }
-      end
+      include_examples 'redirects guest to log in page'
 
       context 'when user' do
         before do
@@ -196,31 +155,20 @@ RSpec.describe 'Categories' do
         end
 
         describe 'assignments and responses' do
-          before { patch_update }
-
           it 'does proper assignment' do
+            patch_update
             expect(assigns(:category)).to eq(category)
           end
 
-          it 'responds in proper format' do
-            expect(response).to have_http_status(:ok)
-            expect(response.content_type).to eq(
-              'text/vnd.turbo-stream.html; charset=utf-8'
-            )
-          end
+          include_examples 'turbo_stream response'
         end
       end
     end
 
     context 'with invalid parameters' do
-      let(:headers) { nil }
       let(:name) { '' }
 
-      context 'when guest' do
-        before { patch_update }
-
-        it { expect(response).to redirect_to('/users/sign_in') }
-      end
+      include_examples 'redirects guest to log in page'
 
       context 'when user' do
         before do
@@ -231,12 +179,7 @@ RSpec.describe 'Categories' do
           expect { patch_update }.not_to change { category.reload.name }
         end
 
-        it 'responds in proper format' do
-          patch_update
-          expect(response).to have_http_status(:unprocessable_entity)
-          expect(response.content_type).to eq 'text/html; charset=utf-8'
-          expect(response).to render_template :edit
-        end
+        include_examples 'html response', :unprocessable_entity, :edit
       end
     end
   end
@@ -244,13 +187,10 @@ RSpec.describe 'Categories' do
   describe 'DELETE #destroy' do
     subject(:delete_destroy) { delete "/categories/#{category.id}", headers: }
 
+    let(:headers) { nil }
     let(:category) { create(:category, user:) }
 
-    context 'when guest' do
-      before { delete_destroy }
-
-      it { expect(response).to redirect_to('/users/sign_in') }
-    end
+    include_examples 'redirects guest to log in page'
 
     context 'when user' do
       before do
@@ -263,31 +203,14 @@ RSpec.describe 'Categories' do
       end
 
       describe 'assignments and responses' do
-        before { delete_destroy }
-
         it 'does proper assignment' do
+          delete_destroy
           expect(assigns(:category)).to eq(category)
         end
 
-        describe 'html response' do
-          let(:headers) { nil }
+        include_examples 'redirects to resourse index page', '/categories'
 
-          it 'responds in proper format' do
-            expect(response).to redirect_to('/categories')
-            expect(response).to have_http_status(:see_other)
-          end
-        end
-
-        describe 'turbo_stream response' do
-          let(:headers) { { 'Accept' => 'text/vnd.turbo-stream.html' } }
-
-          it 'responds in proper format' do
-            expect(response).to have_http_status(:ok)
-            expect(response.content_type).to eq(
-              'text/vnd.turbo-stream.html; charset=utf-8'
-            )
-          end
-        end
+        include_examples 'turbo_stream response'
       end
     end
   end
