@@ -1,24 +1,33 @@
 <%= form_with model: spending do |f| %>
-  <%= render 'devise/shared/error_messages', resource: spending %>
-
   <div class="col">
-    <div class="card h-100">
+    <div class="card">
       <div class="card-body">
-        <h5 class="card-title form-floating">
-          <%= f.text_field :title, class: "form-control", placeholder: 'Spending title' %>
-          <%= f.label :title, 'Spending title' %>
+        <h5 class="card-title input-group">
+          <div class="form-floating <%= 'is-invalid' if spending.errors.include?(:title) %>">
+            <%= f.text_field :title,
+              class: "form-control #{'is-invalid' if spending.errors.include?(:title)}",
+              placeholder: 'Spending title', required: true %>
+            <%= f.label :title, 'Spending title' %>
+          </div>
+          <%= render 'shared/errors', object: spending, field: :title %>
         </h5>
         <h6 class="form-floating">
-          <%= f.collection_select :category_id, current_user.categories, :id, :name, { prompt: true }, { class: "form-select pb-1" } %>
+          <%= f.collection_select :category_id, current_user.categories, :id, :name,
+            { prompt: true }, { class: "form-select pb-1" } %>
           <%= f.label :categories, 'Category' %>
         </h6>
         <p class="card-text form-floating">
           <%= f.text_area :description, class: "form-control", placeholder: 'Spending description' %>
           <%= f.label :description, 'Spending description' %>
         </p>
-        <h4 class="form-floating d-flex justify-content-between align-items-center">
-          <%= f.text_field :amount, class: "form-control pb-1", placeholder: 'Spending amount' %>
-          <%= f.label :amount, 'Spending amount' %>
+        <h4 class="input-group">
+          <div class="form-floating <%= 'is-invalid' if spending.errors.include?(:amount) %>">
+            <%= f.text_field :amount,
+              class: "form-control pb-1 #{'is-invalid' if spending.errors.include?(:amount)}",
+              placeholder: 'Spending amount', required: true %>
+            <%= f.label :amount, 'Spending amount' %>
+          </div>
+          <%= render 'shared/errors', object: spending, field: :amount %>
         </h4>
 
         <%= f.submit 'Submit', class: 'btn btn-success btn-lg' %>

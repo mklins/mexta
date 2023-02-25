@@ -1,16 +1,25 @@
-<h2>Forgot your password?</h2>
+<div class="h-100 d-flex flex-column justify-content-center align-items-center bg-light text-dark">
+  <div class="form-signin m-auto text-center">
+    <h2 class="h3 mb-3 fw-normal">Forgot your password?</h2>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+      <div class="input-group my-2">
+        <div class="form-floating <%= 'is-invalid' if resource.errors.include?(:email) %>">
+          <%= f.email_field :email, autofocus: true, autocomplete: "email",
+            class: "form-control #{'is-invalid' if resource.errors.include?(:email)}",
+            placeholder: 'Email', required: true %>
+          <%= f.label :email %>
+        </div>
+        <%= render 'shared/errors', object: resource, field: :email %>
+      </div>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+      <div class="actions my-2">
+        <%= f.submit "Send me reset password instructions", class: 'btn btn-primary btn-lg' %>
+      </div>
+    <% end %>
+
+    <div class="actions my-2">
+      <%= render "devise/shared/links" %>
+    </div>
   </div>
-
-  <div class="actions">
-    <%= f.submit "Send me reset password instructions" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>
