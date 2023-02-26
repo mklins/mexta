@@ -1,0 +1,20 @@
+<div data-controller='flash'>
+  <% flash.each do |key, value| %>
+    <% if key == 'success' %>
+      <%= tag.div id: key, class: 'alert alert-success', role: 'notification' do %>
+        <i class="bi bi-check-circle-fill me-2"></i>
+        <%= value %>
+      <% end %>
+    <% elsif key == 'notice' %>
+      <%= tag.div id: key, class: 'alert alert-warning', role: 'notification' do %>
+        <i class="bi bi-info-circle-fill me-2"></i>
+        <%= value %>
+      <% end %>
+    <% elsif key == 'alert' %>
+      <%= tag.div id: key, class: 'alert alert-danger', role: 'notification' do %>
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <%= value %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

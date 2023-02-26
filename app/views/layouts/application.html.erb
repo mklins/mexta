@@ -14,12 +14,10 @@
     <% if show_header? %>
       <%= render 'shared/header' %>
     <% end %>
-    <% if notice %>
-      <p class="alert alert-success"><%= notice %></p>
-    <% end %>
-    <% if alert %>
-      <p class="alert alert-danger"><%= alert %></p>
-    <% end %>
+
+    <div id='flash' class='position-absolute top-20 end-0 me-4'>
+      <%= render 'shared/flash' %>
+    </div>
 
     <%= yield %>
 

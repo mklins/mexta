@@ -18,8 +18,10 @@ class CategoriesController < ApplicationController
 
     respond_to do |format|
       if @category.save
+        flash.now[:success] = "Category successfully created!"
         format.turbo_stream
       else
+        flash.now[:alert] = "Something went wrong"
         format.html { render :new, status: :unprocessable_entity }
       end
     end
@@ -28,8 +30,10 @@ class CategoriesController < ApplicationController
   def update
     respond_to do |format|
       if @category.update(category_params)
+        flash.now[:success] = "Category successfully updated!"
         format.turbo_stream
       else
+        flash.now[:alert] = "Something went wrong"
         format.html { render :edit, status: :unprocessable_entity }
       end
     end
@@ -39,6 +43,7 @@ class CategoriesController < ApplicationController
     @category.destroy
 
     respond_to do |format|
+      flash.now[:notice] = "Category destroyed!"
       format.html { redirect_to categories_path, status: :see_other }
       format.turbo_stream
     end

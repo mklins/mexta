@@ -1,1 +1,2 @@
 <%= turbo_stream.replace @category, render(@category) %>
+<%= turbo_stream.prepend 'flash', partial: 'shared/flash' %>
