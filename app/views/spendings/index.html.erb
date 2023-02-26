@@ -1,9 +1,45 @@
 <div class="d-flex flex-row">
-  <aside class="container text-center d-flex align-items-start w-25 m-0 bg-dark text-white">
-    <h1 class="my-5">
-      <%= "Your total spending is:\n#{current_user.spendings.sum(:amount)}" %>
+  <aside class="container text-center d-flex flex-column w-25 m-0 bg-light">
+    <h1 class="my-5 mx-4">
+      <b>
+        Your total spending is:<br>
+        <%= current_user.spendings.sum(:amount) %> ₴
+      </b>
     </h1>
+    <div class="mx-5 border-top">
+      <h1 class="my-5">Search filters</h1>
+      <%= search_form_for @q, data: { turbo_frame: 'spendings' } do |f| %>
+        <div class="form-floating my-2">
+          <%= f.search_field :title_or_description_cont, class: 'form-control',
+            placeholder: '', oninput: 'this.form.requestSubmit()', autocomplete: 'off' %>
+          <%= f.label :title_or_description_cont, 'Title / Description' %>
+        </div>
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-floating">
+              <%= f.search_field :amount_gteq, class: 'form-control', placeholder: '',
+                oninput: 'this.form.requestSubmit()', autocomplete: 'off' %>
+              <%= f.label :amount_gteq, 'Min amount' %>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating">
+              <%= f.search_field :amount_lteq, class: 'form-control', placeholder: '',
+                oninput: 'this.form.requestSubmit()', autocomplete: 'off' %>
+              <%= f.label :amount_lteq, 'Max amount' %>
+            </div>
+          </div>
+        </div>
+        <div class="form-floating my-2">
+          <%= f.collection_select :category_id_eq, current_user.categories, :id, :name,
+            { include_blank: true },
+            { class: "form-select pb-1", oninput: 'this.form.requestSubmit()' } %>
+          <%= f.label :category_id_eq, 'Category' %>
+        </div>
+      <% end %>
+    </div>
   </aside>
+
   <div class="container text-center">
     <div class="col d-flex justify-content-center align-items-center mt-5 mb-0">
       <%= link_to 'Add Spending', new_spending_path,

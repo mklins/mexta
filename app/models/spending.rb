@@ -15,7 +15,10 @@
 #
 # Indexes
 #
+#  index_spendings_on_amount       (amount)
 #  index_spendings_on_category_id  (category_id)
+#  index_spendings_on_description  (description)
+#  index_spendings_on_title        (title)
 #  index_spendings_on_user_id      (user_id)
 #
 # Foreign Keys
@@ -31,4 +34,12 @@ class Spending < ApplicationRecord
   # - Validations - #
   validates :title, :amount, presence: true
   validates :amount, numericality: { greater_than: 0 }
+
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[amount description title category_id]
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    %w[category]
+  end
 end
