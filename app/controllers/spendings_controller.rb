@@ -4,7 +4,8 @@ class SpendingsController < ApplicationController
   before_action :find_spending, only: %i[edit update destroy]
 
   def index
-    @spendings = current_user.spendings.order(created_at: :desc)
+    @q = current_user.spendings.ransack(params[:q])
+    @spendings = @q.result.includes(:category).order(created_at: :desc)
   end
 
   def new

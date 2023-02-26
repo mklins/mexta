@@ -15,7 +15,10 @@
 #
 # Indexes
 #
+#  index_spendings_on_amount       (amount)
 #  index_spendings_on_category_id  (category_id)
+#  index_spendings_on_description  (description)
+#  index_spendings_on_title        (title)
 #  index_spendings_on_user_id      (user_id)
 #
 # Foreign Keys
