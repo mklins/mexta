@@ -1,23 +1,18 @@
-<div class="container text-center">
-  <%= turbo_frame_tag 'categories' do %>
-    <div class="row row-cols-3 g-4 m-5">
+<section class="container text-center h-100">
+  <%= turbo_frame_tag :categories, class: "row row-cols-3 g-4 m-5" do %>
+    <%= render @categories %>
 
-      <%= render @categories %>
-
-      <div id="add_category" class="col d-flex justify-content-center align-items-center">
-        <div class="card rounded-circle">
-          <div class="card-body d-flex justify-content-center align-items-center">
-
-            <%= link_to '+', new_category_path,
-              class: 'btn btn-success rounded-circle aspect-ratio-1 d-flex justify-content-center align-items-center',
-              data: { turbo_frame: dom_id(Category.new) } %>
-
-          </div>
+    <div id="add_category" class="col d-flex justify-content-center align-items-center">
+      <div class="card rounded-circle">
+        <div class="card-body d-flex justify-content-center align-items-center">
+          <%= link_to '+', new_category_path,
+            class: 'btn btn-success rounded-circle aspect-ratio-1 d-flex justify-content-center align-items-center',
+            data: { turbo_frame: :new_category } %>
         </div>
-
-        <%= turbo_frame_tag Category.new %>
-
       </div>
+
+      <%= turbo_frame_tag :new_category %>
+
     </div>
   <% end %>
-</div>
+</section>

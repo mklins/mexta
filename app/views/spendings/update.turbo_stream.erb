@@ -1,2 +1,2 @@
-<%= turbo_stream.replace @spending, render(@spending) %>
+<%= turbo_stream.replace @spending, render(@spending, shared: false) %>
 <%= turbo_stream.prepend 'flash', partial: 'shared/flash' %>

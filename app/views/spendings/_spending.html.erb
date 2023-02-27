@@ -6,7 +6,7 @@
           <div class="w-50 h-100 me-2">
             <h2 class="card-title fw-bold"><%= spending.title %></h2>
             <% if spending.category.present? %>
-              <h4><span class="badge rounded-pill text-bg-info"><%= spending.category.name %></span></h4>
+              <h4><span class="badge rounded-pill text-bg-primary"><%= spending.category.name %></span></h4>
             <% end %>
             <h1 class="m-0 mt-4 d-flex justify-content-center align-items-end"><%= spending.amount %>₴</h1>
           </div>
@@ -19,7 +19,7 @@
       <% end %>
     </div>
     <div class="card-footer">
-      <% if current_page?(spendings_path) %>
+      <% unless shared %>
         <div class="btn-group d-flex align-items-center" role="group">
           <%= link_to 'Edit', edit_spending_path(spending), class: 'btn btn-secondary',
             data: { turbo_frame: "edit_spending_#{spending.id}" } %>
