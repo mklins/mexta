@@ -1,4 +1,4 @@
-# Spendify
+# MExTA
 
 --------
 
@@ -27,8 +27,8 @@ Clone the project from this repository to your projects folder:
 
 ```shell
 $ cd <your_projects_root_folder>
-$ git clone git@github.com:mklins/spendify.git
-$ cd spendify
+$ git clone git@github.com:mklins/mexta.git
+$ cd mexta
 ```
 
 #### Step 2
