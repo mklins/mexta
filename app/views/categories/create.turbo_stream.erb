@@ -1,5 +1,5 @@
 <%= turbo_stream.before 'add_category', render(@category) %>
-<%= turbo_stream.replace dom_id(Category.new) do %>
-  <%= render 'form', category: Category.new, name: 'Category name' %>
+<%= turbo_stream.replace :new_category do %>
+  <%= render 'form', category: Category.new %>
 <% end %>
 <%= turbo_stream.prepend 'flash', partial: 'shared/flash' %>

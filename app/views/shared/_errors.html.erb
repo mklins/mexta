@@ -1,5 +1,5 @@
 <% if object.errors.include?(field) %>
-  <div class="invalid-feedback d-flex justify-content-start">
+  <div class="invalid-feedback d-flex justify-content-start ms-3">
     <%= object.errors[field].join(', ') %>
   </div>
 <% end %>

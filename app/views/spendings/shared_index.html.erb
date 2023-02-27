@@ -1,49 +1,51 @@
-<div class="d-flex flex-row">
-  <aside class="container text-center d-flex flex-column w-25 m-0 bg-light">
-    <h1 class="my-5 mx-4">
-      <b>
-        <%= @user.name.present? ? "#{@user.name}'s" : "#{@user.email}" %> total spending is:<br>
-        <%= @user.spendings.sum(:amount) %> ₴
-      </b>
-    </h1>
-    <div class="mx-5 border-top">
-      <h1 class="my-5">Search filters</h1>
-      <%= search_form_for @q, url: shared_user_spendings_path(@user, @user.share_link),
-        data: { turbo_frame: 'spendings' } do |f| %>
-        <div class="form-floating my-2">
-          <%= f.search_field :title_or_description_cont, class: 'form-control',
-            placeholder: '', oninput: 'this.form.requestSubmit()', autocomplete: 'off' %>
-          <%= f.label :title_or_description_cont, 'Title / Description' %>
-        </div>
-        <div class="row g-2">
-          <div class="col-md">
-            <div class="form-floating">
-              <%= f.search_field :amount_gteq, class: 'form-control', placeholder: '',
-                oninput: 'this.form.requestSubmit()', autocomplete: 'off' %>
-              <%= f.label :amount_gteq, 'Min amount' %>
+<section>
+  <div class="d-flex flex-row h-100">
+    <aside class="container text-center d-flex flex-column w-25 m-0 bg-light">
+      <h1 class="my-5 mx-4">
+        <b>
+          <%= @user.name.present? ? "#{@user.name}'s" : "#{@user.email}" %> total spending is:<br>
+          <%= @user.spendings.sum(:amount) %> ₴
+        </b>
+      </h1>
+      <div class="mx-5 mb-5 border-top">
+        <h1 class="my-5">Search filters</h1>
+        <%= search_form_for @q, url: shared_user_spendings_path(@user, @user.share_link),
+          data: { turbo_frame: 'spendings' } do |f| %>
+          <div class="form-floating my-2">
+            <%= f.search_field :title_or_description_cont, class: 'form-control',
+              placeholder: '', oninput: 'this.form.requestSubmit()', autocomplete: 'off' %>
+            <%= f.label :title_or_description_cont, 'Title / Description' %>
+          </div>
+          <div class="row g-2">
+            <div class="col-md">
+              <div class="form-floating">
+                <%= f.search_field :amount_gteq, class: 'form-control', placeholder: '',
+                  oninput: 'this.form.requestSubmit()', autocomplete: 'off' %>
+                <%= f.label :amount_gteq, 'Min amount' %>
+              </div>
+            </div>
+            <div class="col-md">
+              <div class="form-floating">
+                <%= f.search_field :amount_lteq, class: 'form-control', placeholder: '',
+                  oninput: 'this.form.requestSubmit()', autocomplete: 'off' %>
+                <%= f.label :amount_lteq, 'Max amount' %>
+              </div>
             </div>
           </div>
-          <div class="col-md">
-            <div class="form-floating">
-              <%= f.search_field :amount_lteq, class: 'form-control', placeholder: '',
-                oninput: 'this.form.requestSubmit()', autocomplete: 'off' %>
-              <%= f.label :amount_lteq, 'Max amount' %>
-            </div>
+          <div class="form-floating my-2">
+            <%= f.collection_select :category_id_eq, @user.categories, :id, :name,
+              { include_blank: true },
+              { class: "form-select pb-1", oninput: 'this.form.requestSubmit()' } %>
+            <%= f.label :category_id_eq, 'Category' %>
           </div>
-        </div>
-        <div class="form-floating my-2">
-          <%= f.collection_select :category_id_eq, @user.categories, :id, :name,
-            { include_blank: true },
-            { class: "form-select pb-1", oninput: 'this.form.requestSubmit()' } %>
-          <%= f.label :category_id_eq, 'Category' %>
-        </div>
+        <% end %>
+      </div>
+    </aside>
+
+    <div class="container text-center">
+      <%= turbo_frame_tag 'spendings', class: 'row row-cols-2 g-4 my-4' do %>
+        <%= render @spendings, shared: true %>
       <% end %>
     </div>
-  </aside>
-
-  <div class="container text-center">
-    <%= turbo_frame_tag 'spendings', class: 'row row-cols-2 g-4 my-4' do %>
-      <%= render @spendings %>
-    <% end %>
   </div>
-</div>
+</section>
