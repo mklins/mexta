@@ -31,6 +31,151 @@ RSpec.describe 'Spendings' do
     end
   end
 
+  describe 'GET #shared_index' do
+    subject(:get_shared_index) do
+      get "/users/#{user.id}/spendings/shared/#{share_link}",
+        params: { q: search_params }
+    end
+
+    let(:share_link) { user.share_link }
+    let(:search_params) { nil }
+
+    let!(:spending1) { create(:spending, title: 'bank', user:) }
+    let!(:spending2) { create(:spending, title: 'pool', user:) }
+
+    before do
+      create(:spending, user: other_user)
+      create(:spending, user: other_user)
+    end
+
+    context 'when guest' do
+      it 'doesnt update user share_link' do
+        expect { get_shared_index }.not_to change { user.reload.share_link }
+      end
+
+      it 'does proper assignment' do
+        get_shared_index
+        expect(assigns(:user)).to eq(user)
+        expect(assigns(:spendings)).to match_array([spending2, spending1])
+      end
+
+      describe 'search' do
+        let(:search_params) { { title_cont: 'test' } }
+        let!(:spending3) { create(:spending, title: 'test', user:) }
+        let!(:spending4) { create(:spending, title: 'smthngTest', user:) }
+
+        before do
+          create(:spending, title: 'test', user: other_user)
+          create(:spending, title: 'smthngTest', user: other_user)
+          get_shared_index
+        end
+
+        it 'does proper assignment' do
+          expect(assigns(:q).result).to match_array([spending4, spending3])
+        end
+      end
+
+      include_examples 'html response', :ok, :shared_index
+
+      context 'when NoMethodError occurred' do
+        let(:share_link) { 'abc' }
+
+        before { get_shared_index }
+
+        it { expect(response).to redirect_to(root_path) }
+
+        it do
+          expect(flash[:alert]).to eq(
+            'Sorry, the link you provided is not valid'
+          )
+        end
+      end
+    end
+
+    context 'when user' do
+      context 'when owner' do
+        let(:share_link) { SecureRandom.hex(16) }
+
+        before do
+          sign_in(user)
+        end
+
+        it 'updates user share_link' do
+          expect { get_shared_index }.to change { user.reload.share_link }.
+            to(share_link)
+        end
+
+        it 'does proper assignment' do
+          get_shared_index
+          expect(assigns(:user)).to eq(user)
+          expect(assigns(:spendings)).to match_array([spending2, spending1])
+        end
+
+        describe 'search' do
+          let(:search_params) { { title_cont: 'test' } }
+          let!(:spending3) { create(:spending, title: 'test', user:) }
+          let!(:spending4) { create(:spending, title: 'smthngTest', user:) }
+
+          before do
+            create(:spending, title: 'test', user: other_user)
+            create(:spending, title: 'smthngTest', user: other_user)
+            get_shared_index
+          end
+
+          it 'does proper assignment' do
+            expect(assigns(:q).result).to match_array([spending4, spending3])
+          end
+        end
+
+        include_examples 'html response', :ok, :shared_index
+      end
+
+      context 'when other user' do
+        it 'doesnt update user share_link' do
+          expect { get_shared_index }.not_to change { user.reload.share_link }
+        end
+
+        it 'does proper assignment' do
+          get_shared_index
+          expect(assigns(:user)).to eq(user)
+          expect(assigns(:spendings)).to match_array([spending2, spending1])
+        end
+
+        describe 'search' do
+          let(:search_params) { { title_cont: 'test' } }
+          let!(:spending3) { create(:spending, title: 'test', user:) }
+          let!(:spending4) { create(:spending, title: 'smthngTest', user:) }
+
+          before do
+            create(:spending, title: 'test', user: other_user)
+            create(:spending, title: 'smthngTest', user: other_user)
+            get_shared_index
+          end
+
+          it 'does proper assignment' do
+            expect(assigns(:q).result).to match_array([spending4, spending3])
+          end
+        end
+
+        include_examples 'html response', :ok, :shared_index
+
+        context 'when NoMethodError occurred' do
+          let(:share_link) { 'abc' }
+
+          before { get_shared_index }
+
+          it { expect(response).to redirect_to(root_path) }
+
+          it do
+            expect(flash[:alert]).to eq(
+              'Sorry, the link you provided is not valid'
+            )
+          end
+        end
+      end
+    end
+  end
+
   describe 'GET #new' do
     subject(:get_new) { get '/spendings/new' }
 

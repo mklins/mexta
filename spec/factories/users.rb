@@ -11,6 +11,7 @@
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
+#  share_link             :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
@@ -24,5 +25,6 @@ FactoryBot.define do
     sequence(:name) { Faker::Name.name }
     sequence(:email) { |n| "user#{n}@example.com" }
     password { SecureRandom.hex(10) }
+    share_link { SecureRandom.hex(16) }
   end
 end

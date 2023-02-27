@@ -2,6 +2,6 @@
 
 module ApplicationHelper
   def show_header?
-    true if current_page?(spendings_path) || current_page?(categories_path)
+    true if controller_name == 'spendings' || controller_name == 'categories'
   end
 end
