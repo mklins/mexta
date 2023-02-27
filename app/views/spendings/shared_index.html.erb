@@ -2,13 +2,14 @@
   <aside class="container text-center d-flex flex-column w-25 m-0 bg-light">
     <h1 class="my-5 mx-4">
       <b>
-        Your total spending is:<br>
-        <%= current_user.spendings.sum(:amount) %> ₴
+        <%= @user.name.present? ? "#{@user.name}'s" : "#{@user.email}" %> total spending is:<br>
+        <%= @user.spendings.sum(:amount) %> ₴
       </b>
     </h1>
     <div class="mx-5 border-top">
       <h1 class="my-5">Search filters</h1>
-      <%= search_form_for @q, data: { turbo_frame: 'spendings' } do |f| %>
+      <%= search_form_for @q, url: shared_user_spendings_path(@user, @user.share_link),
+        data: { turbo_frame: 'spendings' } do |f| %>
         <div class="form-floating my-2">
           <%= f.search_field :title_or_description_cont, class: 'form-control',
             placeholder: '', oninput: 'this.form.requestSubmit()', autocomplete: 'off' %>
@@ -31,27 +32,16 @@
           </div>
         </div>
         <div class="form-floating my-2">
-          <%= f.collection_select :category_id_eq, current_user.categories, :id, :name,
+          <%= f.collection_select :category_id_eq, @user.categories, :id, :name,
             { include_blank: true },
             { class: "form-select pb-1", oninput: 'this.form.requestSubmit()' } %>
           <%= f.label :category_id_eq, 'Category' %>
         </div>
       <% end %>
     </div>
-    <div class="m-5 border-top">
-      <%= link_to 'Share your spendings',
-        shared_user_spendings_path(current_user, share_link: SecureRandom.hex(16)),
-        class: 'btn btn-success btn-lg my-5' %>
-    </div>
   </aside>
 
   <div class="container text-center">
-    <div class="col d-flex justify-content-center align-items-center mt-5 mb-0">
-      <%= link_to 'Add Spending', new_spending_path,
-        class: 'btn btn-success btn-lg',
-        data: { turbo_frame: dom_id(Spending.new) } %>
-    </div>
-    <%= turbo_frame_tag Spending.new %>
     <%= turbo_frame_tag 'spendings', class: 'row row-cols-2 g-4 my-4' do %>
       <%= render @spendings %>
     <% end %>

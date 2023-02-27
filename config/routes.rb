@@ -8,4 +8,11 @@ Rails.application.routes.draw do
 
   resources :categories
   resources :spendings
+  resources :users do
+    resources :spendings do
+      collection do
+        get 'shared/:share_link', action: :shared_index, as: :shared
+      end
+    end
+  end
 end

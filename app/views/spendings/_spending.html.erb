@@ -19,12 +19,14 @@
       <% end %>
     </div>
     <div class="card-footer">
-      <div class="btn-group d-flex align-items-center" role="group">
-        <%= link_to 'Edit', edit_spending_path(spending), class: 'btn btn-secondary',
-          data: { turbo_frame: "edit_spending_#{spending.id}" } %>
-        <%= link_to 'Delete', spending_path(spending), class: 'btn btn-danger',
-          data: { turbo_frame: dom_id(spending), turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
-      </div>
+      <% if current_page?(spendings_path) %>
+        <div class="btn-group d-flex align-items-center" role="group">
+          <%= link_to 'Edit', edit_spending_path(spending), class: 'btn btn-secondary',
+            data: { turbo_frame: "edit_spending_#{spending.id}" } %>
+          <%= link_to 'Delete', spending_path(spending), class: 'btn btn-danger',
+            data: { turbo_frame: dom_id(spending), turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
+        </div>
+      <% end %>
       <small class="text-muted"><%= "Created #{spending.created_at}" %></small>
     </div>
   </div>
