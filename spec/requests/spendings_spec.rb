@@ -9,10 +9,12 @@ RSpec.describe 'Spendings' do
   let(:other_user) { create(:user) }
 
   describe 'GET #index' do
-    subject(:get_index) { get '/spendings/' }
+    subject(:get_index) { get '/spendings/', params: { q: search_params } }
 
-    let!(:spending1) { create(:spending, user:) }
-    let!(:spending2) { create(:spending, user:) }
+    let(:search_params) { nil }
+
+    let!(:spending1) { create(:spending, title: 'bank', user:) }
+    let!(:spending2) { create(:spending, title: 'pool', user:) }
 
     include_examples 'redirects guest to log in page'
 
@@ -25,6 +27,22 @@ RSpec.describe 'Spendings' do
       it 'does proper assignment' do
         get_index
         expect(assigns(:spendings)).to match_array([spending2, spending1])
+      end
+
+      describe 'search' do
+        let(:search_params) { { title_cont: 'test' } }
+        let!(:spending3) { create(:spending, title: 'test', user:) }
+        let!(:spending4) { create(:spending, title: 'smthngTest', user:) }
+
+        before do
+          create(:spending, title: 'test', user: other_user)
+          create(:spending, title: 'smthngTest', user: other_user)
+          get_index
+        end
+
+        it 'does proper assignment' do
+          expect(assigns(:q).result).to match_array([spending4, spending3])
+        end
       end
 
       include_examples 'html response', :ok, :index
