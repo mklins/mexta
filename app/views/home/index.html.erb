@@ -1,5 +1,8 @@
-<h1>Welcome to <b>Spendify</b> app!</h1>
-
-<p><%= link_to "Log out", destroy_user_session_path, data: { "turbo-method": :delete } %></p>
-
-<footer>Made as FTL test project</footer>
+<div class="d-flex justify-content-center align-items-center h-100">
+  <div class="text-center">
+    <h1>Welcome to <b>Spendify</b> app!</h1>
+    <p><i>Please sign in or sign up to proceed</i></p>
+    <%= link_to "Sign up", new_user_registration_path, class: "btn btn-primary btn-lg m-3" %>
+    <%= link_to "Sign in", new_user_session_path, class: "btn btn-outline-primary btn-lg m-3" %>
+  </div>
+</div>
