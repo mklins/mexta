@@ -21,9 +21,6 @@ software installed:
 
 ### Installation:
 
-**All the instructions are written for Linux(Ubuntu) system,
-on other systems some of them could be irrelevant!**
-
 #### Step 1
 
 Clone the project from this repository to your projects folder:
@@ -68,8 +65,14 @@ when applying changes to the database, do this:
 
 1. Open the postgres config file with your text editor (nano, vim etc...)
 
+If you're on Debian / Ubuntu:
 ```shell
 $ sudo <text_editor> /etc/postgresql/<version>/main/pg_hba.conf
+```
+
+If you're on Fedora:
+```shell
+$ sudo <text_editor> /var/lib/pgsql/data/pg_hba.conf
 ```
 
 2. Find the line with content like: `local all postgres peer`
@@ -101,7 +104,7 @@ $ corepack enable
 
 #### Step 5
 
-Install [bundler](https://bundler.io/) (if you don't have it yet):
+Install [bundler](https://bundler.io/):
 
 ```shell
 $ gem install bundler
